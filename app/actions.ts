@@ -2,7 +2,7 @@
 
 import { db } from '@/lib';
 import { todos } from '@/lib/schema';
-import { eq } from 'drizzle-orm';
+import { asc, eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { ZodError, z } from 'zod';
 
@@ -15,23 +15,13 @@ type FormErrorFields = {
 };
 export type FormState = {
   message: string;
-  status: string;
   errors: Record<keyof FormErrorFields, string> | undefined;
 };
 
 export async function getTodos() {
   try {
-    const res = await db.query.todos.findMany();
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
-}
-
-export async function getTodoById(id: number) {
-  try {
-    const res = await db.query.todos.findFirst({
-      where: eq(todos.id, id),
+    const res = await db.query.todos.findMany({
+      orderBy: [asc(todos.id)],
     });
     return res;
   } catch (error) {
@@ -50,8 +40,7 @@ export async function createTodo(prevState: FormState, formData: FormData) {
     revalidatePath('/');
 
     return {
-      message: 'Todo added successfully',
-      status: 'success',
+      message: 'success',
       errors: undefined,
     };
   } catch (error) {
@@ -60,8 +49,7 @@ export async function createTodo(prevState: FormState, formData: FormData) {
       const errorMap = zodError.flatten().fieldErrors;
 
       return {
-        message: 'Todo could not be added',
-        status: 'error',
+        message: 'error',
         errors: {
           name: errorMap['todo']?.[0] ?? '',
         },
@@ -69,8 +57,7 @@ export async function createTodo(prevState: FormState, formData: FormData) {
     }
 
     return {
-      message: 'Todo could not be added due to a database error',
-      status: 'error',
+      message: 'error',
       errors: {
         name: 'Database insertion failed',
       },
@@ -90,8 +77,7 @@ export async function editTodo(prevState: FormState, formData: FormData) {
 
     revalidatePath('/');
     return {
-      message: 'Todo edited successfully',
-      status: 'success',
+      message: 'success',
       errors: undefined,
     };
   } catch (error) {
@@ -100,8 +86,7 @@ export async function editTodo(prevState: FormState, formData: FormData) {
       const errorMap = zodError.flatten().fieldErrors;
 
       return {
-        message: 'Todo could not be added',
-        status: 'error',
+        message: 'error',
         errors: {
           name: errorMap['todo']?.[0] ?? '',
         },
@@ -109,8 +94,7 @@ export async function editTodo(prevState: FormState, formData: FormData) {
     }
 
     return {
-      message: 'Todo could not be added due to a database error',
-      status: 'error',
+      message: 'error',
       errors: {
         name: 'Database insertion failed',
       },
@@ -118,19 +102,30 @@ export async function editTodo(prevState: FormState, formData: FormData) {
   }
 }
 
-export async function removeTodo(prevState: any, formData: FormData) {
-  const id = parseInt(formData.get('id') as string);
-
+export async function removeTodo(id: number) {
   try {
     await db.delete(todos).where(eq(todos.id, id));
     revalidatePath('/');
-    return {
-      message: 'Todo removed successfully',
-    };
   } catch (error) {
     console.log(error);
-    return {
-      message: 'Todo could not be removed',
-    };
+  }
+}
+
+export async function toggleTodoCompleted(id: number) {
+  try {
+    const todo = await db.query.todos.findFirst({
+      where: eq(todos.id, id),
+    });
+
+    await db
+      .update(todos)
+      .set({
+        completed: !todo?.completed,
+      })
+      .where(eq(todos.id, id));
+
+    revalidatePath('/');
+  } catch (error) {
+    console.log(error);
   }
 }

@@ -21,7 +21,6 @@ import { Input } from './ui/input';
 
 const initialState = {
   message: '',
-  status: '',
   errors: undefined,
 };
 
@@ -30,7 +29,7 @@ export default function EditTodo({ todo }: { todo: Todo }) {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    if (state?.status === 'success') {
+    if (state?.message === 'success') {
       setOpen(false);
     }
   }, [state]);

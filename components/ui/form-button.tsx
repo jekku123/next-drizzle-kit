@@ -1,19 +1,13 @@
 'use client';
 
 import { useFormStatus } from 'react-dom';
-import { Button } from './button';
+import { Button, ButtonProps } from './button';
 
-type FormButtonProps = {
-  children: React.ReactNode;
-  variant?: 'default' | 'outline';
-  size?: 'default' | 'sm' | 'lg' | 'icon';
-};
-
-export default function FormButton({ children, variant, size }: FormButtonProps) {
+export default function FormButton({ children, ...props }: ButtonProps) {
   const { pending } = useFormStatus();
 
   return (
-    <Button type="submit" disabled={pending} variant={variant} size={size}>
+    <Button type="submit" disabled={pending} {...props}>
       {children}
     </Button>
   );

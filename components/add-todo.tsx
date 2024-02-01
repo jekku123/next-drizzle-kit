@@ -18,7 +18,6 @@ import { Input } from './ui/input';
 
 const initialState = {
   message: '',
-  status: '',
   errors: undefined,
 };
 
@@ -27,7 +26,7 @@ export default function AddTodo() {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    if (state?.status === 'success') {
+    if (state?.message === 'success') {
       setOpen(false);
     }
   }, [state]);
@@ -37,7 +36,7 @@ export default function AddTodo() {
       <DialogTrigger asChild>
         <Button>Add todo</Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="max-w-[425px]">
         <form action={formAction}>
           <DialogHeader>
             <DialogTitle>Add todo</DialogTitle>
