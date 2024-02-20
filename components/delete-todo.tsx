@@ -1,6 +1,6 @@
 'use client';
 
-import { removeTodo } from '@/app/actions';
+import { removeTodo } from '@/lib/actions';
 import { Todo } from '@/lib/schema';
 import { X } from 'lucide-react';
 import FormButton from './ui/form-button';

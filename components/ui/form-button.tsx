@@ -7,7 +7,7 @@ export default function FormButton({ children, ...props }: ButtonProps) {
   const { pending } = useFormStatus();
 
   return (
-    <Button type="submit" disabled={pending} {...props}>
+    <Button type="submit" disabled={pending} aria-disabled={pending} {...props}>
       {children}
     </Button>
   );

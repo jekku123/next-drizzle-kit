@@ -1,6 +1,6 @@
 'use client';
 
-import { toggleTodoCompleted } from '@/app/actions';
+import { toggleTodoCompleted } from '@/lib/actions';
 import { Todo } from '@/lib/schema';
 import FormButton from './ui/form-button';
 

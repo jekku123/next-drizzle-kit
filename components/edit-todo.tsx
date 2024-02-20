@@ -1,6 +1,5 @@
 'use client';
 
-import { editTodo } from '@/app/actions';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -12,6 +11,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
+import { updateTodo } from '@/lib/actions';
 import { Todo } from '@/lib/schema';
 import { EditIcon } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -21,11 +21,11 @@ import { Input } from './ui/input';
 
 const initialState = {
   message: '',
-  errors: undefined,
+  error: undefined,
 };
 
 export default function EditTodo({ todo }: { todo: Todo }) {
-  const [state, formAction] = useFormState(editTodo, initialState);
+  const [state, formAction] = useFormState(updateTodo.bind(null, todo.id), initialState);
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -52,8 +52,7 @@ export default function EditTodo({ todo }: { todo: Todo }) {
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
               <Input id="todo" name="todo" defaultValue={todo.todo!} className="col-span-3" />
-              {state?.errors && <span className="text-red-500">{state?.errors.name}</span>}
-              <Input type="hidden" name="id" value={todo.id} />
+              {state?.error && <span className="text-red-500">{state?.error}</span>}
             </div>
           </div>
           <DialogFooter>
