@@ -1,0 +1,2 @@
+echo "Linting files..."
+npm run lint
