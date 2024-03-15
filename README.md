@@ -4,6 +4,12 @@ Practicing Next.js, Server Actions, Drizzle, Postgres, and Docker by building a 
 
 ## How to run
 
-`npm install`
-`docker compose up` to start the development environment
-`npm run dev` to start the Nextjs development server
+```bash
+docker compose up --build -d
+```
+
+to create the database and run the migrations
+
+```bash
+npm run push
+```

@@ -6,14 +6,21 @@ services:
     restart: always
     ports:
       - 5432:5432
-
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
       POSTGRES_DB: mydb
 
-  adminer:
-    image: adminer
-    restart: always
+  next-app:
+    build:
+      context: .
+    environment:
+      NODE_ENV: development
+      DATABASE_URL: postgres://admin:admin@db:5432/mydb?search_path=public
     ports:
-      - 8080:8080
+      - 3000:3000
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    depends_on:
+      - db
