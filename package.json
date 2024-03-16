@@ -10,7 +10,8 @@
     "generate": "drizzle-kit generate:pg",
     "push": "drizzle-kit push:pg",
     "migrate": "tsx ./lib/migrate.ts",
-    "studio": "drizzle-kit studio"
+    "studio": "drizzle-kit studio",
+    "prepare": "husky"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.0.5",

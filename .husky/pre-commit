@@ -1,0 +1,2 @@
+echo "Checking for linting errors.."
+npm run lint
