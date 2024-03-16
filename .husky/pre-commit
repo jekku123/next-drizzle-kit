@@ -1,2 +1,2 @@
-echo "Checking for linting errors.."
+echo "Checking for linting errors!\n"
 npm run lint

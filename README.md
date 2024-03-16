@@ -2,14 +2,22 @@
 
 Practicing Next.js, Server Actions, Drizzle, Postgres, and Docker by building a simple todo app.
 
-## How to run
+## How to setup
 
 ```bash
-docker compose up --build -d
+./setup.sh
 ```
 
-to create the database and run the migrations
+After running the setup script, you can access the app at `http://localhost:3000`.
+
+Stop the app with:
 
 ```bash
-npm run push
+make down
+```
+
+and start it again with:
+
+```bash
+make up
 ```
