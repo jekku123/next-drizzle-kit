@@ -16,6 +16,8 @@ import { Todo } from '@/lib/schema';
 import { EditIcon } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useFormState } from 'react-dom';
+import { toast } from 'sonner';
+import { OptimisticTodoAction } from './todos';
 import FormButton from './ui/form-button';
 import { Input } from './ui/input';
 
@@ -24,13 +26,19 @@ const initialState = {
   error: undefined,
 };
 
-export default function EditTodo({ todo }: { todo: Todo }) {
+type EditTodoProps = {
+  todo: Todo;
+  setOptimisticTodos: OptimisticTodoAction;
+};
+
+export default function EditTodo({ todo, setOptimisticTodos }: EditTodoProps) {
   const [state, formAction] = useFormState(updateTodo.bind(null, todo.id), initialState);
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
     if (state?.message === 'success') {
       setOpen(false);
+      toast.success('Todo updated successfully');
     }
   }, [state]);
 
@@ -42,7 +50,15 @@ export default function EditTodo({ todo }: { todo: Todo }) {
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
-        <form action={formAction}>
+        <form
+          action={async (formData: FormData) => {
+            setOptimisticTodos({
+              type: 'update',
+              todo: { ...todo, todo: formData.get('todo') as string },
+            });
+            formAction(formData);
+          }}
+        >
           <DialogHeader>
             <DialogTitle>Edit Todo</DialogTitle>
             <DialogDescription>
