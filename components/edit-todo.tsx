@@ -52,10 +52,13 @@ export default function EditTodo({ todo, setOptimisticTodos }: EditTodoProps) {
       <DialogContent className="sm:max-w-[425px]">
         <form
           action={async (formData: FormData) => {
-            setOptimisticTodos({
-              type: 'update',
-              todo: { ...todo, todo: formData.get('todo') as string },
-            });
+            const newTodo = formData.get('todo') as string;
+            if (newTodo) {
+              setOptimisticTodos({
+                type: 'update',
+                todo: { ...todo, todo: newTodo },
+              });
+            }
             formAction(formData);
           }}
         >
@@ -66,10 +69,8 @@ export default function EditTodo({ todo, setOptimisticTodos }: EditTodoProps) {
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Input id="todo" name="todo" defaultValue={todo.todo!} className="col-span-3" />
-              {state?.error && <span className="text-red-500">{state?.error}</span>}
-            </div>
+            <Input id="todo" name="todo" defaultValue={todo.todo!} />
+            {state?.error && <span className="text-red-500">{state?.error}</span>}
           </div>
           <DialogFooter>
             <FormButton>Save</FormButton>
